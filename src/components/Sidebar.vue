@@ -3,6 +3,7 @@
 		<li><router-link to="/admin">Home</router-link></li>
 		<li><router-link to="/admin/blocks">Block</router-link></li>
 		<li><router-link to="/admin/lots">Lot</router-link></li>
+		<li><router-link to="/admin/logout">Logout</router-link></li>
 		
 		<!-- <li>
 			Internet

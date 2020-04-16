@@ -90,7 +90,9 @@ const config = {
     ],
     alias: {
       '@': path.resolve(__dirname, './'),
-      '@components': path.resolve(__dirname, './src/components')
+      '@components': path.resolve(__dirname, './src/components'),
+      '@mixins': path.resolve(__dirname, './src/mixins'),
+      '@services': path.resolve(__dirname, './src/services')
     }
   },
   plugins: [
