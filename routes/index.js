@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import api from '@services/api';
 
 //components
 import Sidebar from '@components/Sidebar';
@@ -22,26 +23,31 @@ const routes = [
     
     {
         path: '/admin',
-        components: {
-            main: Main,
-            sidebar: Sidebar
-        },
+        component: Main,
         children: [
             {
                 path: '/',
+                name: 'Home',
                 components: {
+                    sidebar: Sidebar,
                     default: Home
                 }
             },
             
             {
                 path: 'blocks',
-                component: Block
+                components: {
+                    sidebar: Sidebar,
+                    default: Block
+                }
             },
             
             {
                 path: 'lots',
-                component: Lot
+                components: {
+                    sidebar: Sidebar,
+                    default: Lot
+                }
             },
             
             {
@@ -52,7 +58,10 @@ const routes = [
             
             {
                 path: 'logout',
-                component: Logout
+                components: {
+                    sidebar: Sidebar,
+                    default: Logout
+                }
             },
             
             {
@@ -63,7 +72,21 @@ const routes = [
     }
 ];
 
-export default new VueRouter({
+const router = new VueRouter({
     mode: 'hash',
     routes
 });
+
+//guard
+router.beforeEach(async (to, from, next) => {
+    var isAuthenticated = await api.isAuth();   
+    
+    if (to.name !== 'Login' && !isAuthenticated) {
+        next({ name: 'Login' });
+        return;
+    }
+    
+    next();
+});
+
+export default router;

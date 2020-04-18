@@ -1,10 +1,16 @@
 <template>
-    <div class="row">
-        <div class="col s3" style="padding-left:30px;">
-            <p style="font-weight: bold;font-size: 14pt;">FCCMPC - HVCS</p>
-            <router-view name="sidebar" />    
-        </div>
-        
-        <router-view class="col s9" name="main"/>
-    </div>
+	<div>
+		<nav>
+		    <div class="nav-wrapper">
+		      <a href="#/admin" class="brand-logo">FCCMPC</a>
+		      <ul id="nav-mobile" class="right hide-on-med-and-down">
+		        <li><a href="sass.html">Sass</a></li>
+		        <li><a href="badges.html">Components</a></li>
+		        <li><a href="collapsible.html">JavaScript</a></li>
+		      </ul>
+		    </div>
+		</nav>
+		
+		<router-view />
+	</div>
 </template>

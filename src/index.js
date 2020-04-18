@@ -1,25 +1,10 @@
 import Vue from 'vue';
 import App from './components/App';
 import router from '@/routes/index';
-import api from '@/src/services/api';
 
-router.beforeEach(async (to, from, next) => {
-	var isAuthenticated = false;
-	
-	try {
-		var response = await api.authUser();
-		isAuthenticated = 'user_id' in response;
-	} catch(e) {
-		isAuthenticated = false;
-	}
-	
-	if (to.name !== 'Login' && !isAuthenticated) {
-		next({ name: 'Login' });
-		return;
-	}
-	
-  	next();
-});
+import 'materialize-css';
+import 'materialize-css/dist/css/materialize.min.css'
+import 'materialize-css/dist/js/materialize.min.js'
 
 new Vue({
 	el: '#app',

@@ -99,7 +99,13 @@ const config = {
     new VueLoaderPlugin(),
     new LodashModuleReplacementPlugin,
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
-    new Dotenv()
+    new Dotenv(),
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.$": "jquery",
+      "window.jQuery": "jquery"
+    })
     
     /*new HtmlWebpackPlugin({
       template: require('html-webpack-template'),
@@ -107,7 +113,7 @@ const config = {
       appMountId: 'app',
       filename: 'index.html'
     }),*/
-  ],
+  ],  
   
   devServer: {
     // contentBase: path.join(__dirname, 'dist'),

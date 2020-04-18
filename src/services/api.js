@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 axios.defaults.baseURL = process.env.API_URL;
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token');
+axios.defaults.headers.common['Authorization'] = localStorage.getItem('access_token');
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.headers.common['Accept'] = 'application/json';
 
@@ -30,19 +30,27 @@ export default {
 		});
 	},
 	
-	login(username, password) {
-		var params = {
-			grant_type: 'password',
-			username,
-			password
-		};
+	async login(username, password) {
+		try {
+			var params = {
+				grant_type: 'password',
+				username,
+				password
+			};
+			
+			let response = await this.httpPost('/login', params);
+			let data = response.data || {};
+			
+			if('error' in response || 'error' in data) {
+				return false;
+			}
+			
+			setAccessToken(data.access_token);
+			return true;
+						
+		} catch(e) {}
 		
-		return this.httpPost('/login', params)
-			.then(response => {
-				var data = response.data;
-				setAccessToken(data.access_token);
-			})
-			.catch(error => console.log(error));
+		return false;
 	},
 	
 	async logout() {
@@ -56,7 +64,7 @@ export default {
 			}			
 		} catch(e) {}
 		
-		return;
+		return false;
 	},
 	
 	async authUser() {
@@ -74,5 +82,14 @@ export default {
 		}
 		
 		return user;
+	},
+	
+	async isAuth() {
+		try {
+			var response = await this.authUser();
+			return 'user_id' in response;
+		} catch(e) {}
+		
+		return false;
 	}
 };
