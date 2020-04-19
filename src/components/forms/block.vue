@@ -1,30 +1,26 @@
 <template>
   <!-- Modal Structure -->
   <div class="modal">
-    <div class="modal-content">
-      <h5>Create</h5>
+    <div class="row">
+      <h5>Add/ Edit</h5>
       <!-- <p>A bunch of text</p> -->
       
-      <div class="input-field">
-	    <input id="name" type="text" class="validate" v-model="name">
-	    <label for="name">{{ field }}</label>
+      <div class="form-group">
+      	<label for="name">{{ field }}</label>
+	    <input id="name" type="text" v-model="name" class="form-control">
 	  </div>
-            
-    </div>
-    <div class="modal-footer">
-      <a v-bind:href="parent"
-      	@click="save" 
-      	class="waves-green btn-flat">Save</a>
       	
-      	<a v-bind:href="parent"
-      		class="modal-close waves-effect btn-flat">Close</a>
+      	<button @click="save">Save</button>
+      	
+  		<button data-fancybox-close>Close</button>
     </div>
   </div>
 </template>
 
 <script>
 	import api from '@services/api';
-	
+	import toastr from 'toastr';
+		
 	let modalInstance = null;
 	
 	export default {
@@ -38,22 +34,12 @@
 			}
 		},
 		methods: {
-			openModal() {
-				let modal = $('.modal')[0];
-				
-				modalInstance = M.Modal.init(modal, {
-					dismissible: false
-				});
-				
-				modalInstance.open();
-			},
-			
 			async save() {
 				let error = '';
 				
 				try {
 					if(this.name == null || this.name == '') {
-						M.toast({html: `${this.field} is required.`});
+						toastr.error(`${this.field} is required.`);
 						return;
 					}
 					
@@ -62,7 +48,8 @@
 					});
 					
 					if(response.data.data) {
-						M.toast({html: 'success'});	
+						toastr.success('success');
+						$.fancybox.close();
 						return;
 					}
 					
@@ -76,12 +63,11 @@
 					error = 'error';
 				}
 				
-				M.toast({html: error});
+				toastr(error);
 			}
 		},
 		mounted() {
 			this.bus.$on('newBlock', data => {
-				let vm = this;
 				console.log(data);
 				
 				this.parent = data.parent;
@@ -89,24 +75,16 @@
 				this.field = data.field;
 				
 				$(function(){
-					// $('.modal').modal();
-					vm.openModal();
+					let elem = $('.modal');
+					$.fancybox.open(elem, {
+						// modal: true
+					});
 				});
 			});
-			
-			this.bus.$on('newLot', data => {
-				let vm = this;
-				console.log(data);
-				
-				this.parent = data.parent;
-				this.endpoint = data.endpoint;
-				this.field = data.field;
-				
-				$(function(){
-					// $('.modal').modal();
-					vm.openModal();
-				});
-			});
+		},
+		
+		beforeDestroy() {
+			this.bus.$off('newBlock');
 		}
 	}
 </script>

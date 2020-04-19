@@ -1,27 +1,20 @@
 <template>
-    <form class="col s6" v-on:submit="login">
-        <h5>Login</h5>
-        
+    <form v-on:submit="login" class="col-sm-3">
+        <h3>Login</h3>
         <div class="row">
-            <div class="col s6" style="color:red;">
+            <div style="color:red;">
                 {{ message }}
             </div>
-        </div>
-        
-    	<div class="row">
-            <div class="input-field col s3">
-              <input id="username" type="text" class="validate" v-model="username" required="">
-              <label for="username">Username</label>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="input-field col s3">
-              <input id="password" type="password" class="validate" v-model="password" required="">
-              <label for="password">Password</label>
-            </div>
-        </div>
-        <button class="btn waves-effect waves-light" type="submit" name="action">Submit</button>
+        </div>        
+        <div class="form-group">            
+            <label for="username">Username</label>
+            <input type="text" v-model="username" class="form-control" id="username" required="">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" v-model="password" class="form-control" id="password" required="">
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
     </form>
 </template>
 

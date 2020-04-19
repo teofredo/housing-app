@@ -1,5 +1,5 @@
 <template>
-	<div class="row" style="padding-left:30px;">
+	<nav class="row" style="padding-left:30px;">
        <ul>
 			<li><router-link to="/admin">Home</router-link></li>
 			<li><router-link to="/admin/blocks">Block</router-link></li>
@@ -31,7 +31,7 @@
 			</li>
 			<li><router-link to="/users">Users</router-link></li> -->
 		</ul>
-	</div>
+	</nav>
 </template>
 
 <style>

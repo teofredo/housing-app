@@ -1,66 +1,67 @@
 <template>
 	<div class="row">
-		<div class="col s3">
+		<div class="col-sm-3">
 			<div class="row">
-				<div class="col s3">BLOCK</div>
-				<div class="col s5 offset-s4">
+				<div class="col-sm-3">BLOCK</div>
+				<div class="col-sm-offset-4 col-sm-5">
 					<a href="#/admin/blocks" @click="newBlock">Add</a>
 				</div>
 			</div>
 			
 			<table>
-				<thead>
-					<th>Block</th>
-					<th>Action</th>
-				</thead>
-				<tbody>
-					<tr v-for="item in blocks">
-						<td>{{ item.name }}</td>
-						<td>Edit, Delete</td>
-					</tr>
-				</tbody>
+				<tr style="background-color:yellow;">
+					<td>BLOCK</td>
+					<td>ACTION</td>
+				</tr>
+				
+				<tr v-for="item in blocks">
+					<td>{{ item.name }}</td>
+					<td>Edit, Delete</td>
+				</tr>
 			</table>
 		</div>
 		
-		<div class="col s3 offset-s1">
+		<div class="col-sm-offset-1 col-sm-3">
 			<div class="row">
-				<div class="col s3">LOT</div>
-				<div class="col s5 offset-s4">
+				<div class="col-sm-3">LOT</div>
+				<div class="col-sm-offset-4 col-sm-5">
 					<a href="#/admin/blocks" @click="newLot">Add</a>
 				</div>
 			</div>
 			
 			<table>
-				<thead>
-					<th>Block</th>
-					<th>Lot</th>
-					<th>Action</th>
-				</thead>
-				<tbody>
-					<tr v-for="item in lots">
-						<td>{{ item.block.data.name }}</td>
-						<td>{{ item.name }}</td>
-						<td>Edit, Delete</td>
-					</tr>
-				</tbody>
+				<tr style="background-color: yellow;">
+					<td>Block</td>
+					<td>Lot</td>
+					<td>Action</td>
+				</tr>
+				<tr v-for="item in lots">
+					<td>{{ item.block.data.name }}</td>
+					<td>{{ item.name }}</td>
+					<td>Edit, Delete</td>
+				</tr>
 			</table>
 		</div>
 		
-		<modal :bus="bus" />
+		<BlockFrm :bus="bus" v-if="blockFrmEnabled" />
+		<LotFrm :bus="bus" v-if="lotFrmEnabled" />
 	</div>	
 </template>
 
 <script>
 	import Vue from 'vue';
 	import api from '../services/api';
-	import modal from './utility/modal';
+	import BlockFrm from './forms/block';
+	import LotFrm from './forms/lot';
 	
 	export default {
 		data() {
 			return {
 				bus: new Vue(),
 				blocks: [],
-				lots: []
+				lots: [],
+				blockFrmEnabled: false,
+				lotFrmEnabled: false
 			}
 		},
 		
@@ -83,7 +84,11 @@
 				}
 			},
 			
-			newBlock() {
+			async newBlock() {
+				this.blockFrmEnabled = true;
+				
+				await this.$nextTick();
+				
 				this.bus.$emit('newBlock', {
 					parent: '#/admin/blocks',
 					endpoint: '/blocks',
@@ -91,7 +96,11 @@
 				});
 			},
 			
-			newLot() {
+			async newLot() {
+				this.lotFrmEnabled = true;
+				
+				await this.$nextTick();
+				
 				this.bus.$emit('newLot', {
 					parent: '#/admin/blocks',
 					endpoint: '/lots',
@@ -103,27 +112,36 @@
 		mounted() {
 			this.getBlocks();
 			this.getLots();
+			
+			this.bus.$on('onCloseModal', modal => {
+				if(modal == 'block') {
+					this.blockFrmEnabled = false;
+					console.log(this.blockFrmEnabled);
+				} else if(modal == 'lot') {
+					this.lotFrmEnabled = false;
+					console.log(this.lotFrmEnabled);
+				}
+			});
 		},
 		
-		components: { modal }
+		components: {
+			BlockFrm,
+			LotFrm
+		},
+		
+		beforeDestroy() {
+			this.bus.$off('onCloseModal');
+		}
 	}
 </script>
 
 <style>
-	tbody {
-		display:block;
-		height:500px;
-		overflow:auto;
+	table, th, td {
+	  	border: 1px solid black;
 	}
-	thead, tbody tr {
-		display:table;
-		width:100%;
-		table-layout:fixed;
-	}
-	thead {
-		width: calc( 100% - 1em )
-	}
+	
 	table {
-		width:100%;
+		width: 100%;
+	  	border-collapse: collapse;
 	}
 </style>
