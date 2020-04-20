@@ -10,6 +10,7 @@ import PageNotFound from '@components/404';
 import Home from '@components/Home';
 import Lot from '@components/Lot';
 import Internet from '@components/Internet';
+import Plan from '@components/Plan';
 import Login from '@components/Login';
 import Logout from '@components/Logout';
 
@@ -43,10 +44,18 @@ const routes = [
             },
             
             {
-                path: 'lots',
+                path: 'subscription',
                 components: {
                     sidebar: Sidebar,
-                    default: Lot
+                    default: Internet
+                }
+            },
+            
+            {
+                path: 'plan',
+                components: {
+                    sidebar: Sidebar,
+                    default: Plan
                 }
             },
             

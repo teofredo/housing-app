@@ -1,18 +1,18 @@
 <template>
-	<nav class="row" style="padding-left:30px;">
+	<nav class="row">
        <ul>
 			<li><router-link to="/admin">Home</router-link></li>
-			<li><router-link to="/admin/blocks">Block</router-link></li>
-			<li><router-link to="/admin/lots">Lot</router-link></li>
-			<li><router-link to="/admin/logout">Logout</router-link></li>
-			
-			<!-- <li>
+			<li><router-link to="/admin/blocks">Block/Lot</router-link></li>
+			<li>
 				Internet
 				<ul>
-					<li><router-link to="/plans">Plans</router-link></li>
-					<li><router-link to="/subscriptions">Subscriptions</router-link></li>
+					<li><router-link to="/admin/subscription">Subscriptions</router-link></li>
+					<li><router-link to="/admin/plan">Plans</router-link></li>
 				</ul>
 			</li>
+			<li><router-link to="/admin/logout">Logout</router-link></li>
+			
+			<!-- 
 			<li><router-link to="/accounts">Accounts</router-link></li>
 			<li>
 				Settings
@@ -36,7 +36,7 @@
 
 <style>
     li {
-        margin: 10px 0;
+        margin: 5px 0;
     }
     
     li a {

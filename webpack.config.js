@@ -4,13 +4,12 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
-
 const config = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: '/dist'
   },
   
   watchOptions: {
@@ -99,7 +98,8 @@ const config = {
       '@': path.resolve(__dirname, './'),
       '@components': path.resolve(__dirname, './src/components'),
       '@mixins': path.resolve(__dirname, './src/mixins'),
-      '@services': path.resolve(__dirname, './src/services')
+      '@services': path.resolve(__dirname, './src/services'),
+      '@assets': path.resolve(__dirname, './assets')
     }
   },
   plugins: [
@@ -113,13 +113,6 @@ const config = {
       "window.$": "jquery",
       "window.jQuery": "jquery"
     })
-    
-    /*new HtmlWebpackPlugin({
-      template: require('html-webpack-template'),
-      inject: false,
-      appMountId: 'app',
-      filename: 'index.html'
-    }),*/
   ],  
   
   devServer: {

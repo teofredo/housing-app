@@ -1,37 +1,38 @@
 <template>
-  <!-- Modal Structure -->
-  <div class="modal">
-    <div class="row">
-      <h5>Add/ Edit</h5>
-      <!-- <p>A bunch of text</p> -->
-      
-      <div class="form-group">
-      	<label for="name">{{ field }}</label>
-	    <input id="name" type="text" v-model="name" class="form-control">
-	  </div>
-      	
-      	<button @click="save">Save</button>
-      	
-  		<button data-fancybox-close>Close</button>
-    </div>
-  </div>
+  <div class="modal fade" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h4 class="modal-title">Add/Edit</h4>
+	      </div>
+	      <div class="modal-body">
+	        <div class="form-group">
+		      	<label for="name">Block name</label>
+			    <input id="name" type="text" v-model="name" class="form-control uppercase" placeholder="ex. BLK 1">
+			  </div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary" @click="save">Save</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 </template>
 
 <script>
 	import api from '@services/api';
 	import toastr from 'toastr';
-		
-	let modalInstance = null;
 	
 	export default {
 		props: ['bus'],
 		data() {
 			return {
-				parent: '#',
-				endpoint: '',
-				field: '',
-				name: ''
+				name: null
 			}
+		},
+		computed: {
+			
 		},
 		methods: {
 			async save() {
@@ -39,24 +40,31 @@
 				
 				try {
 					if(this.name == null || this.name == '') {
-						toastr.error(`${this.field} is required.`);
+						toastr.error('block name is required.');
 						return;
 					}
 					
-					let response = await api.httpPost(this.endpoint, {
+					let response = await api.httpPost('/blocks', {
 						name: this.name
 					});
 					
 					if(response.data.data) {
 						toastr.success('success');
-						$.fancybox.close();
+						$('.modal').modal('hide');
+						
+						this.bus.$emit('updateList', {
+							list: 'block',
+							action: 'add',
+							data: response.data.data
+						});
+						
 						return;
 					}
 					
 					let errors = JSON.parse(response.data.error.message);
 					error = '';
 					Object.keys(errors).forEach(key => {
-						error += `${errors[key].toString()};<br/>`;
+						error += `${errors[key].toString()}<br/>`;
 					});
 					
 				} catch(e) {
@@ -67,17 +75,14 @@
 			}
 		},
 		mounted() {
-			this.bus.$on('newBlock', data => {
-				console.log(data);
-				
-				this.parent = data.parent;
-				this.endpoint = data.endpoint;
-				this.field = data.field;
-				
+			const vm = this;
+			
+			vm.bus.$on('newBlock', () => {				
 				$(function(){
-					let elem = $('.modal');
-					$.fancybox.open(elem, {
-						// modal: true
+					$('.modal').modal('show');
+					
+					$('.modal').on('hidden.bs.modal', function(e){
+						vm.bus.$emit('onCloseModal', 'block');
 					});
 				});
 			});
@@ -88,3 +93,12 @@
 		}
 	}
 </script>
+
+<style>
+	.uppercase {
+	    text-transform: uppercase;
+	}
+	.uppercase:placeholder-shown {
+	    text-transform: none;
+	}
+</style>

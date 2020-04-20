@@ -56,12 +56,12 @@ export default {
 	async logout() {
 		try {
 			var response = await this.httpPost('/logout');
-			var data = response.data;
-			if('status' in data && data.status == 'success') {
+			// var data = response.data;
+			// if('status' in data && data.status == 'success') {
 				localStorage.removeItem('access_token');
 				localStorage.removeItem('user');
 				return response;
-			}			
+			// }			
 		} catch(e) {}
 		
 		return false;

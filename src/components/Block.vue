@@ -8,10 +8,10 @@
 				</div>
 			</div>
 			
-			<table>
-				<tr style="background-color:yellow;">
-					<td>BLOCK</td>
-					<td>ACTION</td>
+			<table class="table table-bordered">
+				<tr style="background-color: yellow;">
+					<th>BLOCK</th>
+					<th>ACTION</th>
 				</tr>
 				
 				<tr v-for="item in blocks">
@@ -29,11 +29,11 @@
 				</div>
 			</div>
 			
-			<table>
+			<table class="table table-bordered">
 				<tr style="background-color: yellow;">
-					<td>Block</td>
-					<td>Lot</td>
-					<td>Action</td>
+					<th>Block</th>
+					<th>Lot</th>
+					<th>Action</th>
 				</tr>
 				<tr v-for="item in lots">
 					<td>{{ item.block.data.name }}</td>
@@ -51,6 +51,7 @@
 <script>
 	import Vue from 'vue';
 	import api from '../services/api';
+	import toastr from 'toastr';
 	import BlockFrm from './forms/block';
 	import LotFrm from './forms/lot';
 	
@@ -71,41 +72,54 @@
 					let response = await api.httpGet('/blocks');
 					this.blocks = response.data.data;					
 				} catch(e) {
-					M.toast({html: 'failed to load blocks'});
+					toastr.error('failed to load blocks');
 				}
 			},
 			
 			async getLots() {
 				try {
 					let response = await api.httpGet('/lots?_includes=block');
-					this.lots = response.data.data;					
+					this.lots = response.data.data;
 				} catch(e) {
-					M.toast({html: 'failed to load lots'});
+					toastr.error('failed to load lots');
 				}
 			},
 			
 			async newBlock() {
 				this.blockFrmEnabled = true;
-				
 				await this.$nextTick();
-				
-				this.bus.$emit('newBlock', {
-					parent: '#/admin/blocks',
-					endpoint: '/blocks',
-					field: 'Block name'
-				});
+				this.bus.$emit('newBlock');
 			},
 			
 			async newLot() {
 				this.lotFrmEnabled = true;
-				
 				await this.$nextTick();
-				
-				this.bus.$emit('newLot', {
-					parent: '#/admin/blocks',
-					endpoint: '/lots',
-					field: 'Lot name'
-				});	
+				this.bus.$emit('newLot');	
+			},
+			
+			updateBlockList(data) {
+				if(data.action == 'add') {
+					this.blocks.push(data.data);
+				} else if(data.action == 'edit') {
+					// let blockId = data.data.block_id;
+					// let block = _.find(this.blocks, {block_id: blockId});
+					// _.extend(block, data.data);
+					
+					// _.each(this.blocks, (value, index) => {
+					// 	if(value.block_id == blockId) {
+					// 		this.blocks[index] = block;
+					// 		return false;
+					// 	}
+					// });
+				}
+			},
+			
+			updateLotList(data) {
+				if(data.action == 'add') {
+					this.lots.push(data.data);
+				} else if(data.action == 'edit') {
+					//
+				}
 			}
 		},
 		
@@ -116,10 +130,16 @@
 			this.bus.$on('onCloseModal', modal => {
 				if(modal == 'block') {
 					this.blockFrmEnabled = false;
-					console.log(this.blockFrmEnabled);
 				} else if(modal == 'lot') {
 					this.lotFrmEnabled = false;
-					console.log(this.lotFrmEnabled);
+				}
+			});
+			
+			this.bus.$on('updateList', data => {
+				if(data.list == 'block') {
+					this.updateBlockList(data);
+				} else if(data.list == 'lot') {
+					this.updateLotList(data);
 				}
 			});
 		},
@@ -131,17 +151,18 @@
 		
 		beforeDestroy() {
 			this.bus.$off('onCloseModal');
+			this.bus.$off('updateList');
 		}
 	}
 </script>
 
 <style>
 	table, th, td {
-	  	border: 1px solid black;
+	  	/*border: 1px solid black;*/
 	}
 	
 	table {
 		width: 100%;
-	  	border-collapse: collapse;
+	  	/*border-collapse: collapse;*/
 	}
 </style>

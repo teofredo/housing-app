@@ -20,9 +20,9 @@
 			async logout() {
 				var response = await api.logout();
 				if(!response) {
-					this.message = 'logout failed';
-					console.log('logout failed');
-					return;
+					// this.message = 'logout failed';
+					// console.log('logout failed');
+					// return;
 				}
 				
 				this.$router.push({name: 'Login'});	
