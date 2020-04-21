@@ -1,0 +1,23 @@
+/**
+* app styles using sass
+*/
+
+table {
+	width:100%;
+	
+	thead {
+		background-color:yellow;
+	}
+	
+	th,td {
+		border: 1px solid black;
+	}
+}
+
+.uppercase {
+    text-transform: uppercase;
+    
+    &:placeholder-shown {
+	    text-transform: none;
+	}
+}

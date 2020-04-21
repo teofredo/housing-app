@@ -8,8 +8,7 @@ const config = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/dist'
+    filename: 'bundle.js'
   },
   
   watchOptions: {
@@ -80,11 +79,10 @@ const config = {
           }
         ]
       },
-      
       {
         test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
         use: [
-            'file-loader'
+          'file-loader'
         ]
       }
     ]
@@ -99,6 +97,7 @@ const config = {
       '@components': path.resolve(__dirname, './src/components'),
       '@mixins': path.resolve(__dirname, './src/mixins'),
       '@services': path.resolve(__dirname, './src/services'),
+      '@filters': path.resolve(__dirname, './src/filters'),
       '@assets': path.resolve(__dirname, './assets')
     }
   },
@@ -113,15 +112,7 @@ const config = {
       "window.$": "jquery",
       "window.jQuery": "jquery"
     })
-  ],  
-  
-  devServer: {
-    // contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-    port: 9000,
-    historyApiFallback: true,
-    noInfo: true
-  }
+  ]
 };
 
 module.exports = config;

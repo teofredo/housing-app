@@ -10,6 +10,14 @@
 					<li><router-link to="/admin/plan">Plans</router-link></li>
 				</ul>
 			</li>
+			<li>
+				Customer
+				<ul>
+					<li><router-link to="/admin/new-account">New Account</router-link></li>
+					<li><router-link to="/admin/householders">Owner/Tenant</router-link></li>
+					<li><router-link to="/admin/accounts">Accounts</router-link></li>
+				</ul>
+			</li>
 			<li><router-link to="/admin/logout">Logout</router-link></li>
 			
 			<!-- 

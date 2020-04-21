@@ -122,12 +122,3 @@
 		}
 	}
 </script>
-
-<style>
-	.uppercase {
-	    text-transform: uppercase;
-	}
-	.uppercase:placeholder-shown {
-	    text-transform: none;
-	}
-</style>

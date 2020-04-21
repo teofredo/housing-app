@@ -3,16 +3,16 @@
 		<div class="col-sm-3">
 			<div class="row">
 				<div class="col-sm-3">BLOCK</div>
-				<div class="col-sm-offset-4 col-sm-5">
+				<div class="col-sm-1">
 					<a href="#/admin/blocks" @click="newBlock">Add</a>
 				</div>
 			</div>
 			
 			<table class="table table-bordered">
-				<tr style="background-color: yellow;">
+				<thead>
 					<th>BLOCK</th>
 					<th>ACTION</th>
-				</tr>
+				</thead>
 				
 				<tr v-for="item in blocks">
 					<td>{{ item.name }}</td>
@@ -24,17 +24,17 @@
 		<div class="col-sm-offset-1 col-sm-3">
 			<div class="row">
 				<div class="col-sm-3">LOT</div>
-				<div class="col-sm-offset-4 col-sm-5">
+				<div class="col-sm-1">
 					<a href="#/admin/blocks" @click="newLot">Add</a>
 				</div>
 			</div>
 			
 			<table class="table table-bordered">
-				<tr style="background-color: yellow;">
+				<thead>
 					<th>Block</th>
 					<th>Lot</th>
 					<th>Action</th>
-				</tr>
+				</thead>
 				<tr v-for="item in lots">
 					<td>{{ item.block.data.name }}</td>
 					<td>{{ item.name }}</td>
@@ -70,9 +70,9 @@
 			async getBlocks() {
 				try {
 					let response = await api.httpGet('/blocks');
-					this.blocks = response.data.data;					
+					this.blocks = response.data.data;
 				} catch(e) {
-					toastr.error('failed to load blocks');
+					toastr.error('error loading blocks');
 				}
 			},
 			
@@ -155,14 +155,3 @@
 		}
 	}
 </script>
-
-<style>
-	table, th, td {
-	  	/*border: 1px solid black;*/
-	}
-	
-	table {
-		width: 100%;
-	  	/*border-collapse: collapse;*/
-	}
-</style>

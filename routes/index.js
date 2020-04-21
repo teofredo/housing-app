@@ -2,17 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import api from '@services/api';
 
-//components
 import Sidebar from '@components/Sidebar';
-import Main from '@components/Main';
-import Block from '@components/Block';
 import PageNotFound from '@components/404';
-import Home from '@components/Home';
-import Lot from '@components/Lot';
-import Internet from '@components/Internet';
-import Plan from '@components/Plan';
-import Login from '@components/Login';
-import Logout from '@components/Logout';
 
 Vue.use(VueRouter);
 
@@ -24,14 +15,14 @@ const routes = [
     
     {
         path: '/admin',
-        component: Main,
+        component: require('@components/Main').default,
         children: [
             {
                 path: '/',
                 name: 'Home',
                 components: {
                     sidebar: Sidebar,
-                    default: Home
+                    default: require('@components/Home').default
                 }
             },
             
@@ -39,7 +30,7 @@ const routes = [
                 path: 'blocks',
                 components: {
                     sidebar: Sidebar,
-                    default: Block
+                    default: require('@components/Block').default
                 }
             },
             
@@ -47,7 +38,7 @@ const routes = [
                 path: 'subscription',
                 components: {
                     sidebar: Sidebar,
-                    default: Internet
+                    default: require('@components/Internet').default
                 }
             },
             
@@ -55,21 +46,45 @@ const routes = [
                 path: 'plan',
                 components: {
                     sidebar: Sidebar,
-                    default: Plan
+                    default: require('@components/Plan').default
+                }
+            },
+            
+            {
+                path: 'accounts',
+                components: {
+                    sidebar: Sidebar,
+                    default: require('@components/Account').default
+                }
+            },
+            
+            {
+                path: 'new-account',
+                components: {
+                    sidebar: Sidebar,
+                    default: require('@components/NewAccount').default
+                }
+            },
+            
+            {
+                path: 'householders',
+                components: {
+                    sidebar: Sidebar,
+                    default: require('@components/Householder').default
                 }
             },
             
             {
                 path: 'login',
                 name: 'Login',
-                component: Login
+                component: require('@components/Login').default
             },
             
             {
                 path: 'logout',
                 components: {
                     sidebar: Sidebar,
-                    default: Logout
+                    default: require('@components/Logout').default
                 }
             },
             
