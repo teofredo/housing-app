@@ -9,7 +9,6 @@
 				<table class="table table-bordered" v-if="!isLoading">
 					<thead>
 						<th>House No</th>
-						<th>Meter Name</th>
 						<th>Type</th>
 						<th>Lastname</th>
 						<th>Firstname</th>
@@ -19,12 +18,12 @@
 						<th>Moved in</th>
 						<th>Block</th>
 						<th>Lot</th>
+						<th>Meter No</th>
 						<th>Action</th>
 					</thead>
 					
 					<tr v-for="item in householders">
 						<td>{{ item.house_no }}</td>
-						<td>{{ item.water_meter_no }}</td>
 						<td>{{ item.type }}</td>
 						<td>{{ item.lastname.toUpperCase() }}</td>
 						<td>{{ item.firstname.toUpperCase() }}</td>
@@ -34,6 +33,7 @@
 						<td>{{ item.moved_in }}</td>
 						<td>{{ item.lot.data.block.data.name }}</td>
 						<td>{{ item.lot.data.name }}</td>
+						<td>{{ item.water_meter_no }}</td>
 						<td>View, Edit, Delete</td>
 					</tr>
 				</table>

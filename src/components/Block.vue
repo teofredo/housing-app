@@ -2,34 +2,13 @@
 	<div class="row">
 		<div class="col-sm-3">
 			<div class="row">
-				<div class="col-sm-3">BLOCK</div>
-				<div class="col-sm-1">
-					<a href="#/admin/blocks" @click="newBlock">Add</a>
-				</div>
-			</div>
-			
-			<table class="table table-bordered">
-				<thead>
-					<th>BLOCK</th>
-					<th>ACTION</th>
-				</thead>
-				
-				<tr v-for="item in blocks">
-					<td>{{ item.name }}</td>
-					<td>Edit, Delete</td>
-				</tr>
-			</table>
-		</div>
-		
-		<div class="col-sm-offset-1 col-sm-3">
-			<div class="row">
-				<div class="col-sm-3">LOT</div>
-				<div class="col-sm-1">
+				<div class="col-sm-10">LOT</div>
+				<div class="col-sm-2">
 					<a href="#/admin/blocks" @click="newLot">Add</a>
 				</div>
 			</div>
 			
-			<table class="table table-bordered">
+			<table class="table table-bordered datatable">
 				<thead>
 					<th>Block</th>
 					<th>Lot</th>
@@ -37,6 +16,26 @@
 				</thead>
 				<tr v-for="item in lots">
 					<td>{{ item.block.data.name }}</td>
+					<td>{{ item.name }}</td>
+					<td>Edit, Delete</td>
+				</tr>
+			</table>
+		</div>
+		<div class="col-sm-3">
+			<div class="row">
+				<div class="col-sm-10">BLOCK</div>
+				<div class="col-sm-2">
+					<a href="#/admin/blocks" @click="newBlock">Add</a>
+				</div>
+			</div>
+			
+			<table class="table table-bordered datatable">
+				<thead>
+					<th>BLOCK</th>
+					<th>ACTION</th>
+				</thead>
+				
+				<tr v-for="item in blocks">
 					<td>{{ item.name }}</td>
 					<td>Edit, Delete</td>
 				</tr>

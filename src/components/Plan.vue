@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<div class="row">
-			<div class="col-sm-3">INTERNET PLANS</div>
-			<div class="col-sm-1">
+			<div class="col-sm-9">INTERNET PLANS</div>
+			<div class="col-sm-3">
 				<a href="#/admin/plan" @click="newPlan">Add</a>
 			</div>
 		</div>
@@ -26,9 +26,8 @@
 					</tr>
 				</table>
 			</div>
-			
-			<PlanFrm :bus="bus" v-if="planFrmEnabled" />
 		</div>
+		<PlanFrm :bus="bus" v-if="planFrmEnabled" />
 	</div>
 </template>
 
