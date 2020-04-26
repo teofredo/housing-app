@@ -91,7 +91,7 @@
 	import _ from 'lodash';
 	import flatPickr from 'vue-flatpickr-component';
   	import 'flatpickr/dist/flatpickr.css';
-  	import response from '../mixins/response';
+  	import response from '@mixins/response';
 	
 	export default {
 		data() {

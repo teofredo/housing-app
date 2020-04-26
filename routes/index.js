@@ -10,7 +10,7 @@ Vue.use(VueRouter);
 const routes = [
     {
         path: '*',
-        component: PageNotFound
+        redirect: '/admin'
     },
     
     {
@@ -62,7 +62,7 @@ const routes = [
                 path: 'new-account',
                 components: {
                     sidebar: Sidebar,
-                    default: require('@components/NewAccount').default
+                    default: require('@components/forms/NewAccount').default
                 }
             },
             
@@ -97,7 +97,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
-    mode: 'hash',
+    // mode: 'history',
     routes
 });
 

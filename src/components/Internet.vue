@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		
-		<!-- <SubscriptionFrm :bus="bus" v-if="subscriptionFrmEnabled" /> -->
+		<SubscriptionFrm :bus="bus" v-if="subscriptionFrmEnabled" />
 	</div>
 </template>
 
@@ -48,7 +48,7 @@
 	import Vue from 'vue';
 	import api from '../services/api';
 	import toastr from 'toastr';
-	// import SubscriptionFrm from './forms/subscription';
+	import SubscriptionFrm from './forms/subscription';
 	import currency from '../filters/currency';
 	
 	export default {
@@ -64,7 +64,7 @@
 			async getSubscriptions() {
 				try {
 					let response = await api.httpGet('/internet-subscriptions?_includes=account,plan');
-					this.subscriptions = response.data.data;	
+					this.subscriptions = response.data.data;
 				} catch(e) {
 					toastr.error('failed to load lists');
 				}
@@ -77,6 +77,8 @@
 			},
 			
 			updateSubscriptionList(data) {
+				console.log(data);
+				
 				if(data.action == 'add') {
 					this.subscriptions.push(data.data);
 				} else if(data.action == 'edit') {
@@ -98,7 +100,7 @@
 		},
 		
 		components: {
-			// SubscriptionFrm
+			SubscriptionFrm
 		},
 		
 		filters: {
