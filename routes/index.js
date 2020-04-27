@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import api from '@services/api';
-
 import Sidebar from '@components/Sidebar';
-import PageNotFound from '@components/404';
 
 Vue.use(VueRouter);
 
@@ -75,6 +73,22 @@ const routes = [
             },
             
             {
+                path: 'fees',
+                components: {
+                    sidebar: Sidebar,
+                    default: require('@components/Fee').default
+                }
+            },
+            
+            {
+                path: 'water-rates',
+                components: {
+                    sidebar: Sidebar,
+                    default: require('@components/WaterRate').default
+                }
+            },
+            
+            {
                 path: 'login',
                 name: 'Login',
                 component: require('@components/Login').default
@@ -90,7 +104,7 @@ const routes = [
             
             {
                 path: '*',
-                component: PageNotFound
+                component: require('@components/404').default
             }
         ]
     }

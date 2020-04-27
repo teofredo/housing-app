@@ -7,21 +7,23 @@
 	      </div>
 	      <div class="modal-body">
 	        <div class="form-group">
-		      	<label for="name">Plan</label>
-			    <input id="name" type="text" v-model="name" class="form-control uppercase" placeholder="ex. Plan 1299">
+		      	<label for="name">Fee</label>
+			    <input id="name" type="text" v-model="name" class="form-control" placeholder="ex. Association dues">
 			</div>
 			<div class="form-group">
-		      	<label for="monthly">Monthly price</label>
-			    <input id="monthly" type="text" v-model="monthly" class="form-control" placeholder="ex. 1299">
+		      	<label for="amount">Amount</label>
+			    <input id="amount" type="text" v-model="amount" class="form-control" placeholder="0.00">
 			</div>
 			<div class="form-group">
-		      	<label for="mbps">Speed (mbps)</label>
-			    <input id="mbps" type="number" v-model="mbps" class="form-control" placeholder="ex. 10">
+				<label for="description">Description</label>
+				<textarea class="form-control" v-model="description" :placeholder="sampleDescription"></textarea>
 			</div>
-			<div class="form-group">
-		      	<label for="description">Description</label>
-			    <textarea id="description" class="form-control" v-model="description" placeholder="ex. Unlimited plan for as low as PHP 1,299 with speeds ranging from 3 MBps to 15 Mbps."></textarea>
-			</div>			  
+			<div class="checkbox">
+		      	<label>
+			    	<input id="otherFee" type="checkbox" v-model="otherFee">
+			    	other fee
+			    </label>
+			</div>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -44,9 +46,10 @@
 		data() {
 			return {
 				name: null,
-				monthly: null,
-				mbps: null,
-				description: null
+				amount: null,
+				otherFee: false,
+				description: null,
+				sampleDescription: 'Ex. Association dues are currently computed based on prevailing rates & service charges. This inlcudes for 24hrs security , CCTV, Street Lights, Garbage collection, Villas street cleaner & garbage collection personnel.'
 			}
 		},
 		computed: {
@@ -58,24 +61,19 @@
 				
 				try {
 					if(this.name == null || this.name == '') {
-						toastr.error('plan is required.');
+						toastr.error('fee name is required.');
 						return;
 					}
 					
-					if(this.monthly == null || this.monthly == '') {
-						toastr.error('monthly price is required.');
+					if(this.amount == null || this.amount == '') {
+						toastr.error('amount is required.');
 						return;
 					}
 					
-					if(this.mbps == null || this.mbps == '') {
-						toastr.error('mbps is required.');
-						return;
-					}
-					
-					let response = await api.httpPost('/internet-plans', {
+					let response = await api.httpPost('/fees', {
 						name: this.name,
-						monthly: this.monthly,
-						mbps: this.mbps,
+						fee: this.amount,
+						other_fee: this.otherFee,
 						description: this.description
 					});
 					
@@ -103,7 +101,7 @@
 		mounted() {
 			const vm = this;
 			
-			vm.bus.$on('newPlan', () => {				
+			vm.bus.$on('newFee', () => {				
 				$(function(){
 					$('.modal').modal('show');
 					
@@ -115,7 +113,7 @@
 		},
 		
 		beforeDestroy() {
-			this.bus.$off('newPlan');
+			this.bus.$off('newFee');
 		}
 	}
 </script>

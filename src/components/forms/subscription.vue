@@ -71,11 +71,12 @@
 	import flatPickr from 'vue-flatpickr-component';
   	import 'flatpickr/dist/flatpickr.css';
   	import moment from 'moment';
-  	import response from '@mixins/response';
 	
 	export default {
 		props: ['bus'],
-		mixins: [response],
+		mixins: [
+			require('@mixins/response').default	
+		],
 		components: {
 			flatPickr
 		},
@@ -216,7 +217,7 @@
 						localStorage.removeItem('data-oldIndex');
 						$('#input-dropdown').off('keyup');
 						$('.dropdown-menu').off('keyup');
-						vm.bus.$emit('onCloseModal', 'block');
+						vm.bus.$emit('onCloseModal');
 					});
 				});
 			});

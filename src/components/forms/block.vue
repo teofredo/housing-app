@@ -26,6 +26,9 @@
 	
 	export default {
 		props: ['bus'],
+		mixins: [
+			require('@mixins/response').default	
+		],
 		data() {
 			return {
 				name: null
@@ -61,11 +64,7 @@
 						return;
 					}
 					
-					let errors = JSON.parse(response.data.error.message);
-					error = '';
-					Object.keys(errors).forEach(key => {
-						error += `${errors[key].toString()}<br/>`;
-					});
+					error = this.parseError(response);
 					
 				} catch(e) {
 					error = 'error';

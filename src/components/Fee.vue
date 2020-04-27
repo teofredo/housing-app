@@ -1,33 +1,36 @@
 <template>
 	<div>
 		<div class="row">
-			<div class="col-sm-9">INTERNET PLANS</div>
-			<div class="col-sm-3">
-				<a href="#/admin/plan" @click="newPlan">Add</a>
+			<div class="col-sm-3">FEES</div>
+			<div class="col-sm-1 col-sm-offset-8">
+				<a href="#/admin/fees" @click="newFee">Add</a>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-sm-10">
+			<div class="col-sm-12">
 				<table class="table table-bordered">
 					<thead>
-						<th>Name</th>
-						<th>Monthly</th>
-						<th>MBPS</th>
+						<!-- <th>Code</th> -->
+						<th>Fee</th>
+						<th>Amount</th>
+						<th>other fee</th>
 						<th>Description</th>
 						<th>Action</th>
 					</thead>
 					
-					<tr v-for="item in plans">
+					<tr v-for="item in fees">
+						<!-- <td>{{ item.code }}</td> -->
 						<td>{{ item.name }}</td>
-						<td>{{ item.monthly | currency }}</td>
-						<td>{{ item.mbps }}</td>
-						<td>{{ item.description }}</td>
+						<td>{{ item.fee | currency }}</td>
+						<td>{{ item.other_fee ? 'yes' : 'no' }}</td>
+						<td>{{ item.description.substring(0,100) + '...' }}</td>
 						<td>Edit, Delete</td>
 					</tr>
 				</table>
 			</div>
 		</div>
-		<PlanFrm :bus="bus" v-if="planFrmEnabled" />
+		
+		<FeeFrm :bus="bus" v-if="feeFrmEnabled" />
 	</div>
 </template>
 
@@ -35,37 +38,39 @@
 	import Vue from 'vue';
 	import api from '../services/api';
 	import toastr from 'toastr';
-	import PlanFrm from './forms/plan';
+	import FeeFrm from './forms/fee';
 	import currency from '@filters/currency';
 	
 	export default {
 		data() {
 			return {
 				bus: new Vue(),
-				plans: [],
-				planFrmEnabled: false
+				fees: [],
+				feeFrmEnabled: false
 			}
 		},
 		
 		methods: {
-			async getPlans() {
+			async getFees() {
 				try {
-					let response = await api.httpGet('/internet-plans');
-					this.plans = response.data.data;	
+					let response = await api.httpGet('/fees');
+					this.fees = response.data.data;
 				} catch(e) {
-					toastr.error('failed to load internet plans');
+					toastr.error('failed to load lists');
 				}
 			},
 			
-			async newPlan() {
-				this.planFrmEnabled = true;
+			async newFee() {
+				this.feeFrmEnabled = true;
 				await this.$nextTick();
-				this.bus.$emit('newPlan');
+				this.bus.$emit('newFee');
 			},
 			
-			updatePlanList(data) {
+			updateFeeList(data) {
+				console.log(data);
+				
 				if(data.action == 'add') {
-					this.plans.push(data.data);
+					this.fees.push(data.data);
 				} else if(data.action == 'edit') {
 					//
 				}
@@ -73,19 +78,19 @@
 		},
 		
 		mounted() {
-			this.getPlans();
+			this.getFees();
 			
 			this.bus.$on('onCloseModal', modal => {
-				this.planFrmEnabled = false;
+				this.feeFrmEnabled = false;
 			});
 			
 			this.bus.$on('updateList', data => {
-				this.updatePlanList(data);
+				this.updateFeeList(data);
 			});
 		},
 		
 		components: {
-			PlanFrm
+			FeeFrm
 		},
 		
 		filters: {

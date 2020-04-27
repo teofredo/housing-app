@@ -2,14 +2,6 @@
 	<nav class="row">
        <ul>
 			<li><router-link to="/admin">Home</router-link></li>
-			<li><router-link to="/admin/blocks">Block/Lot</router-link></li>
-			<li>
-				Internet
-				<ul>
-					<li><router-link to="/admin/subscription">Subscriptions</router-link></li>
-					<li><router-link to="/admin/plan">Plans</router-link></li>
-				</ul>
-			</li>
 			<li>
 				Customer
 				<ul>
@@ -18,6 +10,15 @@
 					<li><router-link to="/admin/accounts">Accounts</router-link></li>
 				</ul>
 			</li>
+			<li>
+				Internet
+				<ul>
+					<li><router-link to="/admin/subscription">Subscriptions</router-link></li>
+					<li><router-link to="/admin/plan">Plans</router-link></li>
+				</ul>
+			</li>
+			<li><router-link to="/admin/fees">Fees</router-link></li>
+			<li><router-link to="/admin/blocks">Block/Lot</router-link></li>
 			<li><router-link to="/admin/logout">Logout</router-link></li>
 			
 			<!-- 

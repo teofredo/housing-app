@@ -49,7 +49,7 @@
 	import api from '../services/api';
 	import toastr from 'toastr';
 	import SubscriptionFrm from './forms/subscription';
-	import currency from '../filters/currency';
+	import currency from '@filters/currency';
 	
 	export default {
 		data() {
