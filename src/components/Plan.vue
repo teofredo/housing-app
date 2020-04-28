@@ -7,7 +7,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-sm-10">
+			<div class="col-sm-12">
 				<table class="table table-bordered">
 					<thead>
 						<th>Name</th>
@@ -21,7 +21,7 @@
 						<td>{{ item.name }}</td>
 						<td>{{ item.monthly | currency }}</td>
 						<td>{{ item.mbps }}</td>
-						<td>{{ item.description }}</td>
+						<td>{{ item.description.substring(0,100) + '...' }}</td>
 						<td>Edit, Delete</td>
 					</tr>
 				</table>

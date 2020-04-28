@@ -17,7 +17,15 @@
 					<li><router-link to="/admin/plan">Plans</router-link></li>
 				</ul>
 			</li>
-			<li><router-link to="/admin/fees">Fees</router-link></li>
+			
+			<li>
+				Fees/Rates
+				<ul>
+					<li><router-link to="/admin/fees">Fixed</router-link></li>
+					<li><router-link to="/admin/water-rates">Water Rates</router-link></li>
+				</ul>
+			</li>
+
 			<li><router-link to="/admin/blocks">Block/Lot</router-link></li>
 			<li><router-link to="/admin/logout">Logout</router-link></li>
 			

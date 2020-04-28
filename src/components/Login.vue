@@ -1,32 +1,37 @@
 <template>
-    <form v-on:submit="login" class="col-sm-3">
-        <h3>Login</h3>
-        <div class="row">
-            <div style="color:red;">
-                {{ message }}
-            </div>
-        </div>        
-        <div class="form-group">            
-            <label for="username">Username</label>
-            <input type="text" v-model="username" class="form-control" id="username" required="">
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" v-model="password" class="form-control" id="password" required="">
-          </div>
-          <button type="submit" class="btn btn-default">Submit</button>
-    </form>
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-5">
+            <form v-on:submit="login" class="well" autocomplete="off">
+                <h4 style="text-align:center;">Housing Villas Collection System</h4>
+                
+                <p :class="alertClass" v-html="alertMsg" v-if="showAlert" style="font-size: 9pt;"></p>
+
+                <div class="form-group">            
+                    <label for="username">Username</label>
+                    <input type="text" v-model="username" class="form-control" id="username" required="">
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" v-model="password" class="form-control" id="password" required="">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
+    </div>
 </template>
 
 <script>
 import api from '@services/api';
+import toastr from 'toastr';
     
 export default {
     data() {
         return {
             username: null,
             password: null,
-            message: ''
+            showAlert: false,
+            alertMsg: null,
+            alertClass: 'alert alert-danger'
         }
     },
     methods: {
@@ -35,11 +40,19 @@ export default {
             
             let response = await api.login(this.username, this.password);
             if(!response) {
-                this.message = 'Invalid username and/or password.';
+                this.alert('alert alert-danger', 'Invalid username and/or password.');
+                toastr.error('login failed');
                 return;
             }
             
+            toastr.success('logged in successfully');
             this.$router.push({ name: 'Home' });
+        },
+
+        alert(alertClass, alertMsg) {
+            this.alertClass = alertClass;
+            this.alertMsg = alertMsg;
+            this.showAlert = true;
         }
     }
 }  

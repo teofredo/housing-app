@@ -4,7 +4,7 @@
 			<div class="col-sm-12">Owner/Tenant</div>
 		</div>
 		<div class="row">
-			<div class="col-sm-10">
+			<div class="col-sm-12">
 				<div class="preloader" v-if="isLoading">Loading..</div>
 				<table class="table table-bordered" v-if="!isLoading">
 					<thead>

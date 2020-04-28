@@ -28,7 +28,7 @@
 			</div>
 		</div>
 		
-		<!-- <FeeFrm :bus="bus" v-if="feeFrmEnabled" /> -->
+		<WaterRateFrm :bus="bus" v-if="waterRateFrmEnabled" />
 	</div>
 </template>
 
@@ -36,7 +36,7 @@
 	import Vue from 'vue';
 	import api from '../services/api';
 	import toastr from 'toastr';
-	import FeeFrm from './forms/fee';
+	import WaterRateFrm from './forms/water-rate';
 	import currency from '@filters/currency';
 	
 	export default {
@@ -49,26 +49,26 @@
 		},
 		
 		methods: {
-			async getFees() {
+			async getWaterRates() {
 				try {
 					let response = await api.httpGet('/water-rates');
-					this.fees = response.data.data;
+					this.waterRates = response.data.data;
 				} catch(e) {
 					toastr.error('failed to load lists');
 				}
 			},
 			
-			async newFee() {
-				this.feeFrmEnabled = true;
+			async newWaterRate() {
+				this.waterRateFrmEnabled = true;
 				await this.$nextTick();
-				this.bus.$emit('newFee');
+				this.bus.$emit('newWaterRate');
 			},
 			
-			updateFeeList(data) {
+			updateList(data) {
 				console.log(data);
 				
 				if(data.action == 'add') {
-					this.fees.push(data.data);
+					this.waterRates.push(data.data);
 				} else if(data.action == 'edit') {
 					//
 				}
@@ -76,19 +76,19 @@
 		},
 		
 		mounted() {
-			this.getFees();
+			this.getWaterRates();
 			
 			this.bus.$on('onCloseModal', modal => {
-				this.feeFrmEnabled = false;
+				this.waterRateFrmEnabled = false;
 			});
 			
 			this.bus.$on('updateList', data => {
-				this.updateFeeList(data);
+				this.updateList(data);
 			});
 		},
 		
 		components: {
-			FeeFrm
+			WaterRateFrm
 		},
 		
 		filters: {
