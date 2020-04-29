@@ -23,7 +23,7 @@
 						<td>{{ item.name }}</td>
 						<td>{{ item.fee | currency }}</td>
 						<td>{{ item.other_fee ? 'yes' : 'no' }}</td>
-						<td>{{ item.description.substring(0,100) + '...' }}</td>
+						<td>{{ item.description | truncate(0, 100) }}</td>
 						<td>Edit, Delete</td>
 					</tr>
 				</table>
@@ -40,6 +40,7 @@
 	import toastr from 'toastr';
 	import FeeFrm from './forms/fee';
 	import currency from '@filters/currency';
+	import truncate from '@filters/truncate';
 	
 	export default {
 		data() {
@@ -94,7 +95,7 @@
 		},
 		
 		filters: {
-			currency
+			currency, truncate
 		},
 		
 		beforeDestroy() {

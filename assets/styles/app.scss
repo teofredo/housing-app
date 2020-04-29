@@ -22,3 +22,15 @@
 	    text-transform: none;
 	}
 }
+
+nav {
+	&.sidebar {
+		li a {
+			color: #2c3e50;
+		}
+
+		.router-link-exact-active {
+	        color: green;
+	    }
+	}
+}

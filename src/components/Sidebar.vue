@@ -1,5 +1,5 @@
 <template>
-	<nav class="row">
+	<nav class="row sidebar">
        <ul>
 			<li><router-link to="/admin">Home</router-link></li>
 			<li>POS</li>
@@ -36,7 +36,7 @@
 			<li>
 				Fees/Rates
 				<ul>
-					<li><router-link to="/admin/fees">Fixed</router-link></li>
+					<li><router-link to="/admin/fees">Fees</router-link></li>
 					<li><router-link to="/admin/water-rates">Water Rates</router-link></li>
 				</ul>
 			</li>
@@ -47,17 +47,3 @@
 		</ul>
 	</nav>
 </template>
-
-<style>
-    /*li {
-        margin: 5px 0;
-    }*/
-    
-    li a {
-    	color: #2c3e50;
-    }
-    
-    .router-link-exact-active {
-        color: green;
-    }
-</style>

@@ -21,7 +21,7 @@
 						<td>{{ item.name }}</td>
 						<td>{{ item.monthly | currency }}</td>
 						<td>{{ item.mbps }}</td>
-						<td>{{ item.description.substring(0,100) + '...' }}</td>
+						<td>{{ item.description | truncate(0, 100) }}</td>
 						<td>Edit, Delete</td>
 					</tr>
 				</table>
@@ -37,6 +37,7 @@
 	import toastr from 'toastr';
 	import PlanFrm from './forms/plan';
 	import currency from '@filters/currency';
+	import truncate from '@filters/truncate';
 	
 	export default {
 		data() {
@@ -89,7 +90,7 @@
 		},
 		
 		filters: {
-			currency
+			currency, truncate
 		},
 		
 		beforeDestroy() {

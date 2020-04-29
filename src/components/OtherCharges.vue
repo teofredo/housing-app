@@ -21,26 +21,36 @@
         </div>
     	<div class="row" style="margin-top: 10px;">
     		<div class="col-sm-12">
-        		<div id="loading" v-if="isLoading">Loading..</div>
-                <a :href="parent" v-if="isLoaded">Add</a>
+        		<div id="account-info" v-if="account">
+                    <table>
+                        <tr>
+                            <th>Account No</th>
+                            <td style="padding-left: 20px;">{{ account.account_no }}</td>
+                        </tr>
+                        <tr>
+                            <th>Account Name</th>
+                            <td style="padding-left: 20px;">{{ account.account_name }}</td>
+                        </tr>
+                    </table>
+                    <br/>
+                </div>
 
-                <table class="table table-bordered" v-if="!isLoading">
+                <div id="loading" v-if="isLoading">Loading..</div>
+                <a :href="parent" v-if="isLoaded" @click="newCharge">Add</a>
+
+                <table class="table table-bordered" v-if="isLoaded">
                     <thead>
-                        <th>Account No</th>
-                        <th>Account Name</th>
-                        <th>Fee Name</th>
+                        <th>Fee/Charge</th>
                         <th>Amount</th>
                         <th>Due date</th>
                         <th>Description</th>
                         <th>Action</th>
                     </thead>
                     <tr v-for="item in otherCharges">
-                        <td>{{ item.account.data.account_no }}</td>
-                        <td>{{ item.account.data.account_name }}</td>
                         <td>{{ item.fee.data.name }}</td>
-                        <td>{{ item.fee.data.fee | currency}}</td>
+                        <td>{{ item.amount | currency}}</td>
                         <td>{{ item.due_date }}</td>
-                        <td>{{ item.description }}</td>
+                        <td>{{ item.description | truncate(0, 50) }}</td>
                         <td>Edit, Delete</td>
                     </tr>
 
@@ -50,6 +60,8 @@
                 </table>
     		</div>
     	</div>
+
+        <OtherChargeFrm :bus="bus" v-if="otherChargeFrmEnabled" />
     </div>
 </template>
 
@@ -57,9 +69,12 @@
 import Vue from 'vue';
 import AccountAutocomplete from '@components/common/account-autocomplete';
 import api from '@services/api';
-import currency from '@filters/currency';
 import flatPickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
+import toastr from 'toastr';
+import currency from '@filters/currency';
+import truncate from '@filters/truncate';
+import OtherChargeFrm from './forms/other-charge';
 
 export default {
 	data() {
@@ -71,23 +86,38 @@ export default {
             isLoading: false,
             dueDate: null,
             parent: '#',
-            isLoaded: false
+            isLoaded: false,
+            otherChargeFrmEnabled: false
 		}
 	},
 	components: {
 		AccountAutocomplete,
-        flatPickr
+        flatPickr,
+        OtherChargeFrm
 	},
+    filters: {
+        currency, truncate
+    },
 	methods: {
         async loadAccountCharges(event) {
             event.preventDefault();
 
             try {
+                if(!this.account) {
+                    toastr.error('please select account');
+                    return;
+                }
+
+                if(this.dueDate == '' || this.dueDate == null) {
+                    toastr.error('please select due date');
+                    return;
+                }
+
                 this.isLoading = true;
                 this.isLoaded = false;
 
                 let params = {
-                    '_includes': 'fee,account',
+                    '_includes': 'fee',
                     '_where': `due_date=${this.dueDate}`
                 };
 
@@ -107,6 +137,26 @@ export default {
             this.account = null;
             this.dueDate = null;
             this.bus.$emit('clearSelectedAccount');
+        },
+
+        updateList(data) {
+            console.log(data);
+            if(data.action === 'add') {
+                this.otherCharges.push(data.data);
+            } else if(data.action === 'edit') {
+                //
+            }
+        },
+
+        async newCharge() {
+            this.otherChargeFrmEnabled = true;
+
+            await this.$nextTick();
+
+            this.bus.$emit('newCharge', {
+                account: this.account, 
+                due_date: this.dueDate
+            });
         }
 	},
 	mounted() {
@@ -114,10 +164,19 @@ export default {
             this.account = account;
 		});
 
+        this.bus.$on('updateList', data => {
+            this.updateList(data);
+        });
+
+        this.bus.$on('onCloseModal', () => {
+            this.otherChargeFrmEnabled = false;
+        });
+
         this.parent = `#${this.$router.currentRoute.path}` || '#';
 	},
 	beforeDestroy() {
 		this.bus.$off('onSelectAccount');
+        this.bus.$off('updateList');
 	}
 }
 </script>
