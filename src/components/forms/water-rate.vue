@@ -57,15 +57,33 @@
 				let error = '';
 				
 				try {
-					// if(this.minM3 == null || this.minM3 == '') {
-					// 	toastr.error('fee name is required.');
-					// 	return;
-					// }
+					if(this.minM3 == null || this.minM3 == '') {
+						toastr.error('minimum m3 is required.');
+						return;
+					}
 					
-					// if(this.amount == null || this.amount == '') {
-					// 	toastr.error('amount is required.');
-					// 	return;
-					// }
+					if(this.maxM3 == null || this.maxM3 == '') {
+						toastr.error('maximum m3 is required.');
+						return;
+					}
+
+					if(this.perM3 == null || this.perM3 == '') {
+						toastr.error('rate per m3 is required.');
+						return;
+					}
+
+					let n = Number.parseFloat(this.minM3);
+					if(Number.isNaN(n)) {
+						toastr.error('invalid minimum m3');
+						return;
+					} 
+
+					if(n == 0) {
+						if(this.minFee == null || this.minFee == '') {
+							toastr.error('minimum fee is required');
+							return;
+						}
+					}
 					
 					let response = await api.httpPost('/water-rates', {
 						min_m3: this.minM3,
@@ -96,7 +114,14 @@
 			},
 
 			checkValue() {
-				this.isMinM3Zero = this.minM3 == 0;
+				let n = Number.parseFloat(this.minM3);
+				if(Number.isNaN(n)) {
+					this.isMinM3Zero = false;
+					toastr.error('invalid minimum m3');
+					return;
+				}
+
+				this.isMinM3Zero = n == 0;
 			}
 		},
 		mounted() {

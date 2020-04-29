@@ -2,6 +2,21 @@
 	<nav class="row">
        <ul>
 			<li><router-link to="/admin">Home</router-link></li>
+			<li>POS</li>
+			<li>Account
+				<ul>
+					<li><router-link to="/admin/other-charges">Charge</router-link></li>
+					<li>Adjustment</li>
+				</ul>
+			</li>
+			<li>
+				Report
+				<ul>
+					<li>SOA/Bill</li>
+					<li>Sales</li>
+					<li>Other</li>
+				</ul>
+			</li>
 			<li>
 				Customer
 				<ul>
@@ -26,35 +41,17 @@
 				</ul>
 			</li>
 
-			<li><router-link to="/admin/blocks">Block/Lot</router-link></li>
+			<li><router-link to="/admin/blocks">Houses</router-link></li>
+			<li>Users</li>
 			<li><router-link to="/admin/logout">Logout</router-link></li>
-			
-			<!-- 
-			<li><router-link to="/accounts">Accounts</router-link></li>
-			<li>
-				Settings
-				<ul>
-					<li><router-link to="/fees">Fees</router-link></li>
-					<li><router-link to="/water-rates">Water rates</router-link></li>
-					<li><router-link to="/advance">Advanced</router-link></li>
-				</ol>
-			</li>
-			<li>
-				Reports
-				<ul>
-					<li><router-link to="/soa">SOA</router-link></li>
-					<li><router-link to="/sales">Sales</router-link></li>
-				</ul>
-			</li>
-			<li><router-link to="/users">Users</router-link></li> -->
 		</ul>
 	</nav>
 </template>
 
 <style>
-    li {
+    /*li {
         margin: 5px 0;
-    }
+    }*/
     
     li a {
     	color: #2c3e50;

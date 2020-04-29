@@ -87,6 +87,14 @@ const routes = [
                     default: require('@components/WaterRate').default
                 }
             },
+
+            {
+                path: 'other-charges',
+                components: {
+                    sidebar: Sidebar,
+                    default: require('@components/OtherCharges').default
+                }
+            },
             
             {
                 path: 'login',

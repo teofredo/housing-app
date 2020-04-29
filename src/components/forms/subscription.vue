@@ -15,27 +15,8 @@
 			</div>
 	        <div class="form-group">
 	        	<div class="dropdown">
-	        		<label for="input-dropdown">Account Name</label>
-				    <input id="input-dropdown"
-				    	type="text" 
-				    	v-model="accountName" 
-				    	class="dropdown-toggle form-control uppercase" 
-				    	placeholder="search" 
-				    	data-toggle="dropdown"
-				    	@keyup.arrow-down="focusDropdown"
-				    	required=""
-				    	autocomplete="off">
-				    	
-				    <ul class="dropdown-menu" 
-				    	aria-labelledby="input-dropdown"
-				    	style="width: 100%;">
-				    	<li v-for="item, index in filteredAccounts">
-				    		<a href="#admin/subscription" 
-				    			@click="selectAccount(item)"
-				    			:data-index="index"
-				    			:data-id="item.account_id">{{ item.account_no }} {{ item.account_name }}</a>
-				    	</li>
-				    </ul>
+	        		<label for="input-dropdown">Select Account</label>
+	        		<AccountAutocomplete :bus="bus" />
 				</div>
 			</div>
 			<div class="form-group">
@@ -71,6 +52,7 @@
 	import flatPickr from 'vue-flatpickr-component';
   	import 'flatpickr/dist/flatpickr.css';
   	import moment from 'moment';
+  	import AccountAutocomplete from '@components/common/account-autocomplete';
 	
 	export default {
 		props: ['bus'],
@@ -78,30 +60,16 @@
 			require('@mixins/response').default	
 		],
 		components: {
-			flatPickr
+			flatPickr,
+			AccountAutocomplete
 		},
 		data() {
 			return {
-				accountName: null,
-				accounts: [],
 				selectedAccount: null,
 				plans: [],
 				plan: null,
 				startDate: null,
 				endDate: null
-			}
-		},
-		computed: {
-			filteredAccounts() {
-				let vm = this;
-				
-				if(!vm.accountName) {
-					return vm.accounts;
-				}
-				
-				return vm.accounts.filter(function(account){
-					return account.account_name.toLowerCase().indexOf(vm.accountName.toLowerCase()) > -1;
-				});
 			}
 		},
 		methods: {
@@ -164,18 +132,6 @@
 				toastr.error(error);
 			},
 			
-			async getAccounts(){
-				try {
-					// this.isLoading = true;
-					let response = await api.httpGet('/accounts');
-					this.accounts = response.data.data;	
-				} catch(e) {
-					toastr.error('failed to load accounts');
-				} finally {
-					// this.isLoading = false;
-				}
-			},
-			
 			async getPlans() {
 				try {
 					let response = await api.httpGet('/internet-plans');
@@ -185,70 +141,33 @@
 				}
 			},
 			
-			selectAccount(account) {
-				this.selectedAccount = account;
-				this.accountName = account.account_name;
-			},
-			
-			focusDropdown(event) {
-				$(function(){
-					$('.dropdown-menu a')[0].focus();
-				});
-				
-				this.$nextTick();
-			},
-			
 			getEndDate(dateObj, dateString) {
-				let result = moment(dateString, 'YYYY-MM-DD').add('years', 1).format('YYYY-MM-DD');
+				let result = moment(dateString, 'YYYY-MM-DD')
+					.add(1, 'years')
+					.format('YYYY-MM-DD');
+					
 				this.endDate = result;
 			}
 		},
 		mounted() {
 			const vm = this;
-			
-			vm.getAccounts();
+
 			vm.getPlans();
 			
 			vm.bus.$on('newSubscription', () => {				
 				$(function(){
 					$('.modal').modal('show');
-					
-					$('.modal').on('hidden.bs.modal', function(e){
-						localStorage.removeItem('data-oldIndex');
-						$('#input-dropdown').off('keyup');
-						$('.dropdown-menu').off('keyup');
-						vm.bus.$emit('onCloseModal');
-					});
 				});
 			});
-			
-			$(function(){
-				$('.dropdown-menu').on('keyup', function(e){
-					let keyCode = e.which || e.keycode;
-					
-					let target = $(e.target)[0];
-					let index = target.dataset.index;
-					let oldIndex = localStorage.getItem('data-oldIndex') || null;
-					
-					if(oldIndex == 0 && keyCode == 38) {
-						$('#input-dropdown').focus();
-					}
-					
-					localStorage.setItem('data-oldIndex', index);
-				});
-				
-				$('#input-dropdown').on('keyup', function(e){
-					let dropdown = $('.dropdown-toggle');
-					
-					if($('.dropdown .dropdown-menu').is(':hidden')) {
-						dropdown.dropdown('toggle');	
-					}
-				});
+
+			vm.bus.$on('onSelectAccount', account => {
+				this.selectedAccount = account;
 			});
 		},
 		
 		beforeDestroy() {
 			this.bus.$off('newSubscription');
+			this.bus.$off('onSelectAccount');
 		}
 	}
 </script>
