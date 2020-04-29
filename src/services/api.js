@@ -15,6 +15,7 @@ var setAccessToken = function(accessToken){
 
 export default {
 	httpGet(endpoint, params) {
+		console.log(params);
 		return axios.get(endpoint, params || {});
 	},
 	

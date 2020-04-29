@@ -4,7 +4,7 @@
 	    	type="text" 
 	    	v-model="accountName" 
 	    	class="dropdown-toggle form-control uppercase" 
-	    	placeholder="search" 
+	    	:placeholder="placeholder" 
 	    	data-toggle="dropdown"
 	    	@keyup.arrow-down="focusDropdown"
 	    	required=""
@@ -28,7 +28,7 @@ import api from '@services/api';
 import toastr from 'toastr';
 
 export default {
-	props: ['bus'],
+	props: ['bus', 'placeholder'],
 	data() {
 		return {
 			accountName: null,
@@ -103,6 +103,11 @@ export default {
 		});
 
 		vm.parent = `#${vm.$router.currentRoute.path}` || '#';
+
+		this.bus.$on('clearSelectedAccount', () => {
+			this.selectedAccount = null;
+			this.accountName = null;
+		});
 	},
 	beforeDestroy() {
 		localStorage.removeItem('data-oldIndex');
@@ -110,6 +115,8 @@ export default {
 			$('#input-dropdown').off('keyup');
 			$('.dropdown-menu').off('keyup');
 		});
+
+		this.bus.$off('clearSelectedAccount');
 	}
 }
 </script>
