@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <form @submit="loadAccountCharges($event)">
+            <form @submit="loadAdjustments($event)">
                 <div class="col-sm-6">
                     <AccountAutocomplete :bus="bus" placeholder="select account"/>
                 </div>
@@ -36,32 +36,30 @@
                 </div>
 
                 <div id="loading" v-if="isLoading">Loading..</div>
-                <a :href="parent" v-if="isLoaded" @click="newCharge">Add</a>
+                <a :href="parent" v-if="isLoaded" @click="newAdjustment">Add</a>
 
                 <table class="table table-bordered" v-if="isLoaded">
                     <thead>
-                        <th>Fee/Charge</th>
+                        <th>Adjustment</th>
                         <th>Amount</th>
                         <th>Due date</th>
-                        <th>Description</th>
                         <th>Action</th>
                     </thead>
-                    <tr v-for="item in otherCharges">
-                        <td>{{ item.fee.data.name }}</td>
+                    <tr v-for="item in adjustments">
+                        <td>{{ item.description | truncate(0, 50) }}</td>
                         <td>{{ item.amount | currency}}</td>
                         <td>{{ item.due_date }}</td>
-                        <td>{{ item.description | truncate(0, 50) }}</td>
                         <td>Edit, Delete</td>
                     </tr>
 
-                    <tr v-if="otherCharges.length === 0">
+                    <tr v-if="adjustments.length === 0">
                         <td colspan="6">empty</td>
                     </tr>
                 </table>
     		</div>
     	</div>
 
-        <OtherChargeFrm :bus="bus" v-if="otherChargeFrmEnabled" />
+        <AdjustmentFrm :bus="bus" v-if="adjustmentFrmEnabled" />
     </div>
 </template>
 
@@ -74,31 +72,31 @@ import 'flatpickr/dist/flatpickr.css';
 import toastr from 'toastr';
 import currency from '@filters/currency';
 import truncate from '@filters/truncate';
-import OtherChargeFrm from './forms/other-charge';
+import AdjustmentFrm from './forms/adjustment';
 
 export default {
 	data() {
 		return {
 			bus: new Vue(),
             account: null,
-            otherCharges: [],
+            adjustments: [],
             isLoading: false,
             dueDate: null,
             parent: '#',
             isLoaded: false,
-            otherChargeFrmEnabled: false
+            adjustmentFrmEnabled: false
 		}
 	},
 	components: {
 		AccountAutocomplete,
         flatPickr,
-        OtherChargeFrm
+        AdjustmentFrm
 	},
     filters: {
         currency, truncate
     },
 	methods: {
-        async loadAccountCharges(event) {
+        async loadAdjustments(event) {
             event.preventDefault();
 
             try {
@@ -120,8 +118,8 @@ export default {
                     '_where': `account_id=${this.account.account_id},due_date=${this.dueDate}`
                 };
 
-                let response = await api.httpGet('/other-charges', {params: params});
-                this.otherCharges = response.data.data;
+                let response = await api.httpGet('/adjustments', {params: params});
+                this.adjustments = response.data.data;
 
                 this.isLoaded = true;
             } catch(e) {}
@@ -132,7 +130,7 @@ export default {
         clear() {
             this.isLoading = false;
             this.isLoaded = false;
-            this.otherCharges = [];
+            this.adjustments = [];
             this.account = null;
             this.dueDate = null;
             this.bus.$emit('clearSelectedAccount');
@@ -141,18 +139,18 @@ export default {
         updateList(data) {
             console.log(data);
             if(data.action === 'add') {
-                this.otherCharges.push(data.data);
+                this.adjustments.push(data.data);
             } else if(data.action === 'edit') {
                 //
             }
         },
 
-        async newCharge() {
-            this.otherChargeFrmEnabled = true;
+        async newAdjustment() {
+            this.adjustmentFrmEnabled = true;
 
             await this.$nextTick();
 
-            this.bus.$emit('newCharge', {
+            this.bus.$emit('newAdjustment', {
                 account: this.account, 
                 due_date: this.dueDate
             });
@@ -168,7 +166,7 @@ export default {
         });
 
         this.bus.$on('onCloseModal', () => {
-            this.otherChargeFrmEnabled = false;
+            this.adjustmentFrmEnabled = false;
         });
 
         this.parent = `#${this.$router.currentRoute.path}` || '#';

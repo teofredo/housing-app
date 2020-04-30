@@ -2,11 +2,11 @@
 	<nav class="row sidebar">
        <ul>
 			<li><router-link to="/admin">Home</router-link></li>
-			<li>POS</li>
+			<li><router-link to="/admin/pos">POS</router-link></li>
 			<li>Account
 				<ul>
 					<li><router-link to="/admin/other-charges">Charge</router-link></li>
-					<li>Adjustment</li>
+					<li><router-link to="/admin/adjustments">Adjustment</router-link></li>
 				</ul>
 			</li>
 			<li>

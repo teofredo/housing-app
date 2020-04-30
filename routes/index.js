@@ -95,6 +95,22 @@ const routes = [
                     default: require('@components/OtherCharges').default
                 }
             },
+
+            {
+                path: 'adjustments',
+                components: {
+                    sidebar: Sidebar,
+                    default: require('@components/Adjustment').default
+                }
+            },
+
+            {
+                path: 'pos',
+                components: {
+                    sidebar: Sidebar,
+                    default: require('@components/Pos').default
+                }
+            },
             
             {
                 path: 'login',

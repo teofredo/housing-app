@@ -15,19 +15,12 @@
 				<input id="due-date" type="text" v-model="dueDate" class="form-control" readonly="">
 			</div>
 			<div class="form-group">
-		      	<label for="select-fee">Select fee</label>
-			    <select class="form-control" v-model="fee" @change="onChangeFee">
-			    	<option value="" selected="" disabled=""></option>
-			    	<option v-for="item in fees" :value="item.fee_id">{{ item.name }}</option>
-			    </select>
-			</div>
-			<div class="form-group">
-		      	<label for="fee-amount">Amount</label>
-			    <input id="fee-amount" type="text" v-model="amount" class="form-control">
-			</div>
-			<div class="form-group" v-if="feeCode == 'other'">
 		      	<label for="description">Description</label>
 			    <textarea id="description" v-model="description" class="form-control" placeholder="please specify"></textarea>
+			</div>
+			<div class="form-group">
+		      	<label for="amount">Amount</label>
+			    <input id="amount" type="text" v-model="amount" class="form-control">
 			</div>
 	      </div>
 	      <div class="modal-footer">
@@ -53,12 +46,9 @@
 			return {
 				account: null,
 				accountName: null,
-				fee: null,
 				amount: null,
 				description: null,
-				dueDate: null,
-				fees: [],
-				feeCode: null
+				dueDate: null
 			}
 		},
 		computed: {
@@ -74,11 +64,6 @@
 						return;
 					}
 
-					if(this.fee == null || this.fee == '') {
-						toastr.error('please select fee');
-						return;
-					}
-
 					if(this.amount == null || this.amount == '') {
 						toastr.error('amount is required');
 						return;
@@ -89,9 +74,8 @@
 						return;
 					}
 					
-					let response = await api.httpPost('/other-charges', {
+					let response = await api.httpPost('/adjustments', {
 						account_id: this.account.account_id,
-						fee_id: this.fee,
 						description: this.description,
 						amount: this.amount,
 						due_date: this.dueDate
@@ -103,7 +87,7 @@
 
 						try {
 							let id = response.data.data.id;
-							response = await api.httpGet(`/other-charges/${id}?_includes=fee`);
+							response = await api.httpGet(`/adjustments/${id}`);
 						
 							this.bus.$emit('updateList', {
 								action: 'add',
@@ -123,35 +107,14 @@
 				}
 				
 				toastr.error(error);
-			},
-
-			async getFees() {
-				try {
-					let response = await api.httpGet('/fees');
-					this.fees = response.data.data;
-				} catch(e) {
-					toastr.error('failed to load fees');
-				}
-			},
-
-			onChangeFee() {
-				let fee = _.find(this.fees, {fee_id: this.fee});
-				if(!fee) return;
-				this.feeCode = fee.code;
-				this.amount = fee.fee;
-				if(fee.code != 'other') {
-					this.description = fee.name;
-				} else {
-					this.description = null;
-				}
 			}
 		},
 		mounted() {
 			const vm = this;
-
-			this.getFees();
 			
-			vm.bus.$on('newCharge', data => {
+			vm.bus.$on('newAdjustment', data => {
+console.log(data);
+
 				this.account = data.account;
 				this.accountName = `${data.account.account_no} ${data.account.account_name}`;
 				this.dueDate = data.due_date;
@@ -167,7 +130,7 @@
 		},
 		
 		beforeDestroy() {
-			this.bus.$off('newCharge');
+			this.bus.$off('newAdjustment');
 		}
 	}
 </script>
