@@ -10,11 +10,12 @@
 				</ul>
 			</li>
 			<li>
-				Report
+				Generators
 				<ul>
-					<li>SOA/Bill</li>
-					<li>Sales</li>
-					<li>Other</li>
+					<li>Month dues</li>
+					<li>SOA/Bills</li>
+					<li>Reports</li>
+					<li>Others</li>
 				</ul>
 			</li>
 			<li>
