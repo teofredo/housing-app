@@ -105,6 +105,14 @@ const routes = [
             },
 
             {
+                path: 'water-reading',
+                components: {
+                    sidebar: Sidebar,
+                    default: require('@components/WaterReading').default
+                }
+            },
+
+            {
                 path: 'pos',
                 components: {
                     sidebar: Sidebar,

@@ -32,7 +32,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-sm-2">
+				<div class="col-sm-3">
 					<div class="form-group">
 						<label for="moved-in">Moved-in date</label>
 						<flat-pickr v-model="moved_in" id="moved-in" class="form-control" placeholder="select date"></flat-pickr>
@@ -40,25 +40,25 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-sm-2">
+				<div class="col-sm-3">
 					<div class="form-group">
 				      	<label for="lastname">Lastname</label>
 					    <input id="lastname" type="text" v-model="lastname" class="form-control uppercase" placeholder="ex. Llido" required="">
 					</div>
 				</div>
-				<div class="col-sm-2">
+				<div class="col-sm-3">
 					<div class="form-group">
 				      	<label for="firstname">Firstname</label>
 					    <input id="firstname" type="text" v-model="firstname" class="form-control uppercase" placeholder="ex. Teo" required="">
 					</div>
 				</div>
-				<div class="col-sm-2">
+				<div class="col-sm-3">
 					<div class="form-group">
 				      	<label for="middlename">Middlename</label>
 					    <input id="middlename" type="text" v-model="middlename" class="form-control uppercase" placeholder="ex. Cielo">
 					</div>
 				</div>
-				<div class="col-sm-1">
+				<div class="col-sm-2">
 					<div class="form-group">
 				      	<label for="suffix">Suffix</label>
 					    <input id="suffix" type="text" v-model="suffix" class="form-control uppercase" placeholder="ex. Jr">
@@ -66,7 +66,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-sm-2">
+				<div class="col-sm-3">
 					<div class="form-group">
 				      	<label for="email">Email</label>
 					    <input id="email" type="text" v-model="email" class="form-control" placeholder="ex. teo@gmail.com" required="">

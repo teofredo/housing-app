@@ -41,7 +41,7 @@
 					<li><router-link to="/admin/water-rates">Water Rates</router-link></li>
 				</ul>
 			</li>
-
+			<li><router-link to="/admin/water-reading">Water Reading</router-link></li>
 			<li><router-link to="/admin/blocks">Houses</router-link></li>
 			<li>Users</li>
 			<li><router-link to="/admin/logout">Logout</router-link></li>
