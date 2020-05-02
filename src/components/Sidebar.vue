@@ -12,7 +12,7 @@
 			<li>
 				Generators
 				<ul>
-					<li>Month dues</li>
+					<li><router-link to="/admin/month-dues">Month dues</router-link></li>
 					<li>SOA/Bills</li>
 					<li>Reports</li>
 					<li>Others</li>

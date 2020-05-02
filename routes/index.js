@@ -111,6 +111,14 @@ const routes = [
                     default: require('@components/Pos').default
                 }
             },
+
+            {
+                path: 'month-dues',
+                components: {
+                    sidebar: Sidebar,
+                    default: require('@components/generators/MonthDue').default
+                }
+            },
             
             {
                 path: 'login',
