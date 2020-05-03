@@ -13,8 +13,32 @@
 				<button type="submit" class="btn btn-primary">Find</button>
 			</form>
 		</div>
-		<div class="row" v-if="householder">
-			{{ householder.account.data.account_name }}
+		<div class="row" v-if="householder" style="margin-top:5px;">
+			Owner/Tenant Account: {{ account.account_no }} {{ account.account_name }}
+			<br/>
+
+			<table>
+				<thead>
+					<th>due date</th>
+					<th>prev</th>
+					<th>current</th>
+					<th>consumption</th>
+					<th>read date</th>
+					<th>read by</th>
+					<th>Action</th>
+				</thead>
+				<tr>
+					<td><td/>
+					<td><td/>
+					<td><td/>
+					<td><td/>
+					<td><td/>
+					<td><td/>	
+				</tr>
+			</table>
+		</div>
+		<div class="row" v-if="invalidMeterNo" style="font-style: italic;color: red;">
+			{{ invalidMeterNo }}
 		</div>
 	</div>
 </template>
@@ -27,30 +51,51 @@ export default {
 	data() {
 		return {
 			meterNo: null,
-			householder: null
+			householder: null,
+			invalidMeterNo: null,
+			account: null
 		}
 	},
+
+	mixins: [
+		require('@mixins/response').default
+	],
 
 	methods: {
 		async find(event) {
 			event.preventDefault();
 
+			let error = '';
+			this.invalidMeterNo = null;
+
 			try {
 				let response = await api.httpGet('/householders', {
 					params: {
 						'_includes': 'account',
-						'_find': `water_meter_no=${this.meterNo}`
+						'_find': `water_meter_no:${this.meterNo.toUpperCase()}`
 					}
 				});
 				
 				if(response.data.data) {
 					this.householder = response.data.data;
+					this.account = this.householder.account.data;
 					return;
 				}
 
-			} catch(e) {}
+				error = this.parseError(response);
+				this.invalidMeterNo = '** No account associated with this meter no. please try again.';
 
-			toastr.error('failed to fetch account info');
+			} catch(error) {
+				error = 'failed to fetch account info';
+			}
+
+			toastr.error(error);
+		},
+
+		async getReadings() {
+			try {
+				let response = await api.httpGet()
+			} catch(e) {}
 		}
 	}
 }

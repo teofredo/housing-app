@@ -115,7 +115,7 @@ export default {
 
                 let params = {
                     '_includes': 'fee',
-                    '_where': `account_id=${this.account.account_id},due_date=${this.dueDate}`
+                    '_where': `account_id:${this.account.account_id}, due_date:${this.dueDate}`
                 };
 
                 let response = await api.httpGet('/adjustments', {params: params});
